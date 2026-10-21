@@ -1,6 +1,7 @@
 import { chromium, devices } from '@playwright/test';
 
-const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const channel = process.env.PLAYWRIGHT_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined);
+const browser = await chromium.launch({ channel, headless: true });
 const errors = [];
 const url = process.env.PREVIEW_URL ?? 'http://127.0.0.1:5173';
 try {
@@ -23,7 +24,7 @@ try {
     });
     await page.reload();
     await page.locator('.tile').first().waitFor();
-    await page.screenshot({ path: `docs/preview-${name}.png`, fullPage: true, animations: 'disabled' });
+    await page.screenshot({ path: `docs/images/${name}.png`, fullPage: true, animations: 'disabled' });
     console.log(`${name}: screenshot saved; ${await page.locator('.tile').count()} tiles`);
     await context.close();
   }

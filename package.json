@@ -2,6 +2,16 @@
   "name": "2048-little-moments",
   "version": "1.0.0",
   "private": true,
+  "description": "中文网页版 2048，支持触摸、键盘、自动存档和跨平台测试。",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Uerr-lovelife/2048-little-moments.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Uerr-lovelife/2048-little-moments/issues"
+  },
+  "homepage": "https://github.com/Uerr-lovelife/2048-little-moments#readme",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",

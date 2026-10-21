@@ -1,98 +1,88 @@
 # 2048 · 小小合一下
 
-一个中文网页版 2048。支持电脑键盘、手机滑动、方向按钮、自动续玩与历史最高分。
+[![CI](https://github.com/Uerr-lovelife/2048-little-moments/actions/workflows/ci.yml/badge.svg)](https://github.com/Uerr-lovelife/2048-little-moments/actions/workflows/ci.yml)
 
-使用 HTML、CSS、原生 JavaScript 和 Vite 实现，无后端服务和外部字体依赖。规则与界面独立，适合学习和继续改造。
+一个中文网页版 2048。使用 HTML、CSS、原生 JavaScript 和 Vite，支持电脑键盘、手机滑动、方向按钮、自动续玩及最高分记录。
 
-![游戏桌面预览，示例棋盘](docs/preview-desktop.png)
+规则、存档和界面分开组织，便于学习、修改和移植；无需后端、数据库或在线字体服务。
 
-## 在你的电脑上开始
+![笔记本界面，示例棋盘](docs/images/laptop.png)
 
-环境已验证：Windows、Node.js 24.19.0、npm 11.17.0、Git 2.55.0。项目要求 Node.js 22.12 或更新版本，建议使用 Node.js 24 LTS。
+## 快速开始
 
-在 PowerShell 中打开项目目录：
+需要 Node.js 22.12 或更新版本，推荐 Node.js 24 LTS。安装 Git 后运行：
 
-```powershell
-cd 'G:\CodexProjects\codex开发小游戏'
-npm.cmd ci
-npm.cmd run dev
+```bash
+git clone https://github.com/Uerr-lovelife/2048-little-moments.git
+cd 2048-little-moments
+npm ci
+npm run dev
 ```
 
-首次安装或重新下载项目时运行 `npm.cmd ci`。依赖已安装时只需运行 `npm.cmd run dev`。
+打开终端显示的本地网址。以后只需 `npm run dev`；依赖变化时重新执行 `npm ci`。停止服务按 `Ctrl+C`。
 
-打开终端显示的网址，通常为 http://127.0.0.1:5173 。端口占用时 Vite 会选择后续端口，以终端输出为准。停止服务按 `Ctrl+C`。
+Windows PowerShell 若阻止 `npm.ps1`，改用 `npm.cmd ci`、`npm.cmd run dev`，不用修改系统执行策略。
 
-PowerShell 示例使用 `npm.cmd`，不需要修改系统的脚本执行策略。其他终端也可以使用 `npm`。npm 缓存位于本项目的 `.npm-cache`，不需要更改系统目录权限。
+## 怎么玩
 
-## 操作与规则
+- 方向键、WASD、棋盘滑动或屏幕方向按钮控制移动。
+- 相同数字按移动方向合并，每个方块每步最多参与一次合并。
+- 有效移动后随机生成 2（90%）或 4（10%）；无效移动不生成、不加分、不计步。
+- 合成 2048 获胜，可以继续挑战。棋盘没有空位且无法合并时结束。
+- 点击“新游戏”立即重新开始，并保留当前浏览器的历史最高分。
+- 自动保存当前棋盘和分数；存储不可用时仍能游玩。存档不会在不同浏览器、网址或设备间同步。
 
-- 电脑：方向键或 WASD；也可拖动棋盘或点击方向按钮。
-- 手机：在棋盘上向上、下、左、右滑动；页面其他区域可以正常滚动。
-- 4×4 棋盘，开局生成两个数字。有效移动后随机出现一个 2（90%）或 4（10%），位置从空格中等概率选择。
-- 相同数字从移动方向的前端开始合并，新合成的方块在这一步不会再次合并；分数增加合成后的数字。
-- 无效移动不生成新数字、不加分、不计步。
-- 首次合成 2048 提示获胜，可以继续挑战。没有空位且无法合并时结束。
-- 点击“新游戏”立即重新开始，保留历史最高分。
-
-游戏保存在当前浏览器、当前网址的 localStorage 中。刷新可以续玩；浏览器之间、不同端口或不同网址之间不会同步。清理网站数据会清除存档和最高分。存储被禁用或空间不足时会提示，游戏仍然可玩。
-
-## 理解代码
+## 项目结构
 
 ```text
-index.html                 页面结构与中文文案
+.github/                    CI、问题模板、PR 模板
 src/
-  game.js                  纯规则：移动、合并、生成、计分、胜负
-  storage.js               存档结构验证、保存、读取和失败回退
-  main.js                  输入、动画、页面更新与游戏生命周期
-  style.css                暖色界面、手机与笔记本适配、减少动态效果
-tests/                     规则与存档单元测试
-e2e/game.spec.js            真实浏览器交互测试
-scripts/capture-preview.mjs 生成可复现的示例截图
-docs/                      设计、开发方案、预览截图
-public/favicon.svg         本地站点图标
+  game.js                   纯规则：移动、合并、生成、胜负
+  storage.js                存档验证与失败回退
+  main.js                   输入、渲染、动画、游戏生命周期
+  style.css                 暖色主题、响应式布局、动态效果
+public/                     原样复制到构建产物的静态资源
+scripts/                    截图等维护工具
+tests/                      规则与存档单元测试
+e2e/                        桌面与手机浏览器交互测试
+docs/
+  architecture.md           接口、数据流与扩展位置
+  development.md            环境、测试、截图与排查
+  deployment.md             静态部署、局域网试玩和移植
+  images/                   电脑、笔记本、手机截图
+  history/                  初版设计与开发记录
+index.html                  页面入口与中文文案
+package.json                命令、运行环境与开发依赖
+package-lock.json           锁定依赖版本
+CONTRIBUTING.md             分支、提交、PR 与维护约定
+CHANGELOG.md                版本变更记录
 ```
 
-一次移动的数据流：
+`dist/`、`node_modules/`、缓存和测试结果均不入库。`src/game.js` 不依赖浏览器，可以单独测试并复用。
 
-```text
-键盘 / 滑动 / 按钮
-    → playTurn(state, direction)
-    → moveBoard：计算四向移动、合并、得分和位移记录
-    → 有效移动时 spawnTile：生成一个新数字
-    → 保存新状态 → 展示位移动画 → 更新棋盘与分数
-    → getStatus：判断是否显示获胜或结束提示
-```
+## 验证与构建
 
-`moveBoard` 不修改输入，不生成随机数字，也不访问浏览器。`playTurn` 和 `spawnTile` 的随机源可以注入，便于用固定输入验证结果。移动动画期间锁定重复输入；重新开始会取消旧动画的最终更新，防止画面回到上一局。
+| 命令 | 用途 |
+| --- | --- |
+| `npm test` | 规则、计分、随机生成和存档测试 |
+| `npm run test:e2e` | 键盘、触摸、续玩、胜负、窄屏与动画交互测试 |
+| `npm run build` | 输出可部署的静态文件到 `dist/` |
+| `npm run preview` | 在本机检查打包后的游戏 |
 
-存档格式为 `{ version: 1, state: { board, score, moves, continued }, best }`。非法棋盘、全空棋盘、错误的数字或标记会回退到新游戏，并尽可能保留有效的最高分。
+Windows 测试默认使用已安装的 Edge。Linux / macOS 首次运行浏览器测试前执行 `npx playwright install chromium`。其他浏览器选项见[开发说明](docs/development.md)。
 
-## 测试与构建
+GitHub Actions 会在 Windows 和 Ubuntu 执行单元测试与构建，在 Ubuntu 执行 Chromium 的桌面、手机交互测试。成功后可在对应运行中下载 `2048-static-site` 构建附件。
 
-```powershell
-npm.cmd test
-npm.cmd run test:e2e
-npm.cmd run build
-npm.cmd run preview
-```
+## 修改、移植和发布
 
-- 单元测试使用 Node 内置的 `node:test`，覆盖四向合并、输入不变、单次不可重复合并、随机阈值、无效移动、胜负与存档容错。
-- 浏览器测试使用 Playwright，默认运行已安装的 Microsoft Edge，分别检查桌面与手机环境。包含真实触摸事件、快速按键、刷新、重新开始、胜负提示、320px 窄屏、减少动态效果和笔记本棋盘可见性。
-- 测试会自动启动本地开发服务；已有同端口服务时会复用。测试存档只写入独立测试浏览器，不影响你日常浏览器的进度。
-- 打包结果在 `dist/`，使用相对资源路径，可以部署到静态站点的子目录。用 `npm.cmd run preview` 检查打包后的版本；应通过 HTTP 服务访问，而不是双击 `dist/index.html`。
+- [架构说明](docs/architecture.md)：从哪里改规则、存档和界面。
+- [开发说明](docs/development.md)：完整环境与测试方法。
+- [部署与移植](docs/deployment.md)：复制到其他电脑、静态托管、手机局域网试玩。
+- [贡献与维护约定](CONTRIBUTING.md)：分支、提交和 PR 流程。
+- [变更记录](CHANGELOG.md)：版本功能与工程变更。
 
-浏览器截图可在开发服务启动后生成：
+上传仓库后仍需另行部署，才能获得手机随时可用的在线游戏网址。当前 CI 不会自动启用 GitHub Pages。
 
-```powershell
-node scripts/capture-preview.mjs
-```
+## 许可与来源
 
-这会生成桌面、笔记本、手机三种示例截图。脚本在临时浏览器上下文中放入固定棋盘，不改变你的游玩存档。
-
-## Git 与后续扩展
-
-已忽略依赖目录、构建输出、npm 缓存和测试报告。提交 `package-lock.json`，以便在其他电脑上复现依赖。
-
-建议后续每次创建一个分支，只增加一个功能，例如撤销一步、主题切换或新棋盘尺寸，再完成测试和提交。当前版本不需要 GitHub 账号即可本地游玩；上传仓库与发布在线版本可以独立进行。
-
-本项目的页面、样式和规则代码独立实现，未复制原版 2048 源代码或素材。玩法参考经典 2048。
+页面、样式与规则代码独立实现，玩法参考经典 2048，未复制原版源码或素材。按仓库所有者选择，当前暂不添加开源许可证；公开可查看不代表已授予开源复用许可。
